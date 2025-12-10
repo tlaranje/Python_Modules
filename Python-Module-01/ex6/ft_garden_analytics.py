@@ -1,9 +1,9 @@
 
 class GardenManager:
-    _registry = []
+    _gardens = []
 
     def __init__(self, name):
-        GardenManager._registry.append(self)
+        GardenManager._gardens.append(self)
         self.stats = GardenManager.GardenStats(self)
         self.name = name
         self.plants = []
@@ -23,14 +23,14 @@ class GardenManager:
     @classmethod
     def total_gardens(cls):
         total = 0
-        for _ in cls._registry:
+        for _ in cls._gardens:
             total += 1
         return total
 
     @classmethod
     def create_garden_network(cls):
         scores = {}
-        for g in cls._registry:
+        for g in cls._gardens:
             score = 0
             for p in g.plants:
                 score += p.height
@@ -124,7 +124,13 @@ if __name__ == "__main__":
     bob.add_plant(PrizeFlower("Prize", "Tulip", 40, "pink", 3))
 
     scores = GardenManager.create_garden_network()
-    valid = GardenManager.validate_heights(bob)
+    for g in GardenManager._gardens:
+        if (g.validate_heights(g)):
+            valid = True
+        else:
+            valid = False
     print(f"\nHeight validation test: {valid}")
-    print(f"Garden scores - Alice: {scores['Alice']}, Bob: {scores['Bob']}")
-    print(f"Total gardens managed: {GardenManager.total_gardens()}")
+    if (valid == True):
+        print(f"Garden scores - Alice: {scores['Alice']}, "
+              f"Bob: {scores['Bob']}")
+        print(f"Total gardens managed: {GardenManager.total_gardens()}")
