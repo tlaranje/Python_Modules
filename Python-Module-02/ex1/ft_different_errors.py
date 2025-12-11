@@ -1,5 +1,6 @@
 
 def garden_operations():
+    """Demonstrate different types of common Python errors."""
     try:
         print("Testing ValueError...")
         int("abc")
@@ -33,6 +34,7 @@ def garden_operations():
 
 
 def test_error_types():
+    """Run tests that showcase different handled error types."""
     print("=== Garden Error Types Demo ===\n")
     garden_operations()
     print("All tests completed - program didn't crash!\n")

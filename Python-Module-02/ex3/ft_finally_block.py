@@ -1,0 +1,40 @@
+
+def water_plants(plant_list):
+    """Water each plant in the list and handle invalid plant entries."""
+    print("Opening watering system")
+
+    try:
+        for plant in plant_list:
+            plant[0]
+            print(f"Watering {plant}")
+    except Exception:
+        print(f"Error: Cannot water {plant} - invalid plant!")
+        return
+    finally:
+        print("Closing watering system (cleanup)")
+    print("Watering completed successfully!")
+
+
+def test_watering_system():
+    """Run tests for the water_plants function using valid and invalid data."""
+    plants = [
+        ("Tomato"),
+        ("Lettuce"),
+        ("Carrots"),
+    ]
+    print("=== Garden Watering System ===\n")
+    print("Testing normal watering...")
+    water_plants(plants)
+
+    plants = [
+        ("Tomato"),
+        (None),
+        ("Carrots"),
+    ]
+    print("\nTesting with error...")
+    water_plants(plants)
+    print("\nCleanup always happens, even with errors!")
+
+
+if __name__ == "__main__":
+    test_watering_system()

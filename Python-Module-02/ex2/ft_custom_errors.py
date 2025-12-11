@@ -1,45 +1,43 @@
 
 class GardenError(Exception):
-    def __init__(self, message="Garden error"):
-        super().__init__(message)
+    """Base class for all custom garden-related errors."""
+    def __init__(self, msg):
+        super().__init__(msg)
 
 
 class PlantError(GardenError):
-    def __init__(self, message="Plant error"):
-        super().__init__(message)
+    """Error raised when a plant-related issue occurs."""
+    def __init__(self, msg):
+        super().__init__(msg)
 
 
 class WaterError(GardenError):
-    def __init__(self, message="Water error"):
-        super().__init__(message)
+    """Error raised when a water-related issue occurs."""
+    def __init__(self, msg):
+        super().__init__(msg)
 
 
-def check_soil(days):
-    if days < 30:
-        raise GardenError("The soil is not ready for planting, "
-                          "the soil needs to rest at last 30 days.")
-    print("The soil is ready for planting!")
+def plant_is_wilting(wilting):
+    """Raise a PlantError if the plant is wilting."""
+    if wilting is True:
+        raise PlantError("The tomato plant is wilting!")
+    print("The tomato plant is growing well!")
 
 
-def check_plant_height(height):
-    if height < 0:
-        raise PlantError("The height of the plant cannot be negative value.")
-    print("The plant has an excellent height!")
-
-
-def add_water_to_tank(liters):
-    max_tank_cap = 1000
-    if liters > max_tank_cap:
-        raise WaterError("The tank has reached its maximum capacity of 1000 "
-                         "liters and is flooding.")
-    print(f"Add {liters} liters to the tank!")
+def check_tank(liters):
+    """Raise a WaterError if the water tank has 100 liters or less."""
+    cur_tank_cap = liters
+    if cur_tank_cap <= 100:
+        raise WaterError("Not enough water in the tank!")
+    print(f"The tank has {liters} liters!")
 
 
 if __name__ == "__main__":
     print("=== Custom Garden Errors Demo ===\n")
+
     try:
         print("Testing PlantError...")
-        check_plant_height(-1)
+        plant_is_wilting(True)
     except PlantError as e:
         print("PlantError caught:", e)
 
@@ -47,7 +45,7 @@ if __name__ == "__main__":
 
     try:
         print("Testing WaterError...")
-        add_water_to_tank(1001)
+        check_tank(99)
     except WaterError as e:
         print("WaterError caught:", e)
 
@@ -55,12 +53,13 @@ if __name__ == "__main__":
 
     print("Testing catching all garden errors...")
     try:
-        check_soil(5)
+        plant_is_wilting(True)
     except GardenError as e:
         print("GardenError caught:", e)
 
     try:
-        add_water_to_tank(1001)
+        check_tank(99)
     except GardenError as e:
         print("GardenError caught:", e)
+
     print("\nAll custom error types work correctly!\n")
