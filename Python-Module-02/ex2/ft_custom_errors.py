@@ -1,20 +1,17 @@
 
 class GardenError(Exception):
     """Base class for all custom garden-related errors."""
-    def __init__(self, msg):
-        super().__init__(msg)
+    pass
 
 
 class PlantError(GardenError):
     """Error raised when a plant-related issue occurs."""
-    def __init__(self, msg):
-        super().__init__(msg)
+    pass
 
 
 class WaterError(GardenError):
     """Error raised when a water-related issue occurs."""
-    def __init__(self, msg):
-        super().__init__(msg)
+    pass
 
 
 def plant_is_wilting(wilting):
@@ -26,8 +23,7 @@ def plant_is_wilting(wilting):
 
 def check_tank(liters):
     """Raise a WaterError if the water tank has 100 liters or less."""
-    cur_tank_cap = liters
-    if cur_tank_cap <= 100:
+    if liters <= 100:
         raise WaterError("Not enough water in the tank!")
     print(f"The tank has {liters} liters!")
 
