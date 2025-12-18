@@ -1,0 +1,32 @@
+Ex0 - What happens to the storage system if connections aren’t properly closed?
+Why is the disconnect protocol critical?
+
+Ex1 - What’s the critical difference between extraction mode (’r’) and
+preservation mode (’w’)? Why is this distinction vital for archivists?
+
+Ex02 - Why do the Archives maintain separate channels for standard data and
+alerts? What could happen if these streams were mixed?
+
+Ex03 - How does the with protocol prevent data corruption? What is the RAII
+principle and why is it crucial for vault security?
+
+Ex04 - What are the most dangerous threats to digital archives? How does
+proper crisis response prevent data loss and maintain system stability?
+
+
+Ex0 – Se as conexões não forem fechadas corretamente, o sistema pode travar ou
+perder dados. O protocolo de desconexão garante que tudo seja salvo e liberado
+com segurança.
+
+Ex1 – Modo ’r’ só lê os dados, ’w’ sobrescreve ou altera. É vital para
+arquivistas para não apagar registros importantes.
+
+Ex02 – Separar dados e alertas evita confusão e perda de informações críticas.
+Misturar os fluxos pode causar erros e falhas no sistema.
+
+Ex03 – O with garante que arquivos sejam fechados mesmo se houver erro. RAII
+significa liberar recursos automaticamente, essencial para proteger o cofre de
+dados.
+
+Ex04 – Ameaças incluem falhas de hardware, vírus e erros humanos. Resposta
+rápida a crises evita perda de dados e mantém o sistema estável.
