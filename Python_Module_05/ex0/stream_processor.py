@@ -1,49 +1,142 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Any, List, Dict, Union, Optional
 
-class DataProcessor():
+
+class DataProcessor(ABC):
+    def __init__(self):
+        pass
+
+    @abstractmethod
     def process(self, data: Any) -> str:
-        return ""
+        pass
 
+    @abstractmethod
     def validate(self, data: Any) -> bool:
-        return True
+        pass
 
+    @abstractmethod
     def format_output(self, result: str) -> str:
-        return ""
+        pass
 
 
 class NumericProcessor(DataProcessor):
-    def process(self, data: Any) -> str:
-        return ""
+    def validate(self, data: any) -> bool:
+        try:
+            for d in data:
+                d + 0
+            return True
+        except Exception:
+            return False
 
-    def validate(self, data: Any) -> bool:
-        return True
+    def process(self, data: Any) -> str:
+        return str(f"Processed {len(data)} numeric values, sum={sum(data)}, "
+                   f"avg={sum(data) / len(data)}")
 
     def format_output(self, result: str) -> str:
-        return ""
+        return result
 
 
 class TextProcessor(DataProcessor):
-    def process(self, data: Any) -> str:
-        return ""
-
     def validate(self, data: Any) -> bool:
-        return True
+        try:
+            if data.strip() == "":
+                return False
+            _ = data + ""
+            return True
+        except Exception:
+            return False
+
+    def process(self, data: Any) -> str:
+        return str(f"Processed text: {len(data)} characters, "
+                   f"{len(str(data).split())} words")
 
     def format_output(self, result: str) -> str:
-        return ""
+        return result
 
 
 class LogProcessor(DataProcessor):
-    def process(self, data: Any) -> str:
-        return ""
-
     def validate(self, data: Any) -> bool:
-        return True
+        try:
+            if data == "":
+                return False
+            _ = data + ""
+            text = str(data)
+            return ":" in text and text.split(":", 1)[0].strip() != ""
+        except Exception:
+            return False
+
+    def process(self, data: Any) -> str:
+        log_type, data_log = str(data).split(":", 1)
+        log_type = log_type.strip()
+        data_log = data_log.strip()
+
+        log_levels: Dict[str, str] = {
+            "ERROR": "ALERT",
+            "INFO": "INFO",
+            "WARNING": "WARNING",
+        }
+
+        level = log_levels.get(log_type, "UNKNOWN")
+        return f"[{level}] {log_type} level detected: {data_log}"
+
 
     def format_output(self, result: str) -> str:
-        return ""
+        return result
 
 
 if __name__ == "__main__":
-    print("")
+    print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===\n")
+
+    """ Numeric Processor """
+    data_num: List[any] = [1, 2, 3, 4, 5]
+    num_p = NumericProcessor()
+    print("Initializing Numeric Processor...")
+    print(f"Processing data: {data_num}")
+    if num_p.validate(data_num):
+        print("Validation: Numeric data verified")
+        print("Output:", num_p.format_output(num_p.process(data_num)))
+    else:
+        print("ERROR: The input data is not a valid int!")
+
+    """ Text Processor """
+    data_text = "Hello Nexus World"
+    text_p = TextProcessor()
+    print("\nInitializing Text Processor...")
+    print(f"Processing data: \"{data_text}\"")
+    if text_p.validate(data_text):
+        print("Validation: Text data verified")
+        print("Output:", text_p.format_output(text_p.process(data_text)))
+    else:
+        print("ERROR: The input data is either empty or not a valid str.")
+
+    """ Log Processor """
+    data_log = "ERROR: Connection timeout"
+    log_p = LogProcessor()
+    print("\nInitializing Log Processor...")
+    print(f"Processing data: \"{data_log}\"")
+    if log_p.validate(data_log):
+        print("Validation: Log entry verified")
+        print("Output:", log_p.format_output(log_p.process(data_log)))
+    else:
+        print("ERROR: The input data is either empty, not a valid string, or "
+              "does not have a log type at the beginning of the str.")
+
+    """ Polymorphic Demo """
+    print("\n=== Polymorphic Processing Demo ===")
+    print("Processing multiple data types through same interface...")
+
+    pro_data = [
+        (NumericProcessor(), [1, 2, 3]),
+        (TextProcessor(), "Hello World!"),
+        (LogProcessor(), "INFO: System ready"),
+    ]
+    i = 1
+    for p, d in pro_data:
+        try:
+            if p.validate(d):
+                print(f"Result {i}: {p.format_output(p.process(d))}")
+                i += 1
+        except Exception:
+            continue
+
+    print("\nFoundation systems online. Nexus ready for advanced streams")
