@@ -42,7 +42,8 @@ class TextProcessor(DataProcessor):
             if data.strip() == "":
                 return False
             _ = data + ""
-            return True
+            text = str(data)
+            return not text.split(":", 1)[0].isupper()
         except Exception:
             return False
 
@@ -57,11 +58,21 @@ class TextProcessor(DataProcessor):
 class LogProcessor(DataProcessor):
     def validate(self, data: Any) -> bool:
         try:
-            if data == "":
+            if data.strip() == "":
                 return False
-            _ = data + ""
-            text = str(data)
-            return ":" in text and text.split(":", 1)[0].strip() != ""
+
+            if ":" not in data:
+                return False
+
+            log_type, message = data.split(":", 1)
+
+            if not log_type.strip().isupper():
+                return False
+
+            if message.strip() == "":
+                return False
+
+            return True
         except Exception:
             return False
 
@@ -125,18 +136,16 @@ if __name__ == "__main__":
     print("\n=== Polymorphic Processing Demo ===")
     print("Processing multiple data types through same interface...")
 
-    pro_data = [
-        (NumericProcessor(), [1, 2, 3]),
-        (TextProcessor(), "Hello World!"),
-        (LogProcessor(), "INFO: System ready"),
-    ]
+    data = [[1, 2, 3], "Hello World!", "INFO: System ready"]
+
+    pros = [NumericProcessor(), TextProcessor(), LogProcessor()]
+
     i = 1
-    for p, d in pro_data:
-        try:
+    for d in data:
+        for p in pros:
             if p.validate(d):
                 print(f"Result {i}: {p.format_output(p.process(d))}")
                 i += 1
-        except Exception:
-            continue
-
-    print("\nFoundation systems online. Nexus ready for advanced streams\n")
+                break
+                
+    print("\nFoundation systems online. Nexus ready for advanced streams")
