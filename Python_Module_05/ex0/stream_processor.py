@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, List, Dict, Union, Optional
+from typing import Any, List, Dict
 
 
 class DataProcessor(ABC):
@@ -41,7 +41,7 @@ class TextProcessor(DataProcessor):
         try:
             if data.strip() == "":
                 return False
-            _ = data + ""
+            data + ""
             text = str(data)
             return not text.split(":", 1)[0].isupper()
         except Exception:
@@ -147,5 +147,5 @@ if __name__ == "__main__":
                 print(f"Result {i}: {p.format_output(p.process(d))}")
                 i += 1
                 break
-                
+
     print("\nFoundation systems online. Nexus ready for advanced streams")
