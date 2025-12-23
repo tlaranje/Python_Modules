@@ -9,9 +9,9 @@ class DataStream(ABC):
 
     def filter_data(self, data_batch: List[Any],
                     criteria: Optional[str] = None) -> List[Any]:
-        if criteria == None:
+        if criteria is None:
             return data_batch
-        return data_batch
+        return [d for d in data_batch if d.get("type") == criteria]
 
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
         return {"stream_id": self.stream_id}
@@ -23,14 +23,9 @@ class SensorStream(DataStream):
         self.total_readings = 0
         self.avg_temp = 0.0
 
-    def filter_data(self, data_batch, criteria: Optional[str] = None) -> List[Any]:
-        if criteria == "Temp":
-            return [d for d in data_batch if 'temp' in d]
-        return data_batch
-
     def process_batch(self, data_batch: List[Any]) -> str:
-        filtered = self.filter_data(data_batch, 'Temp')
-        self.total_readings = sum(len(d) for d in filtered)
+        filtered = self.filter_data(data_batch, 'sensor')
+        self.total_readings = sum(len(d) for d in filtered) - 1
         self.avg_temp = sum(d['temp'] for d in filtered) / len(filtered)
 
         print("Initializing Sensor Stream...")
@@ -51,35 +46,52 @@ class SensorStream(DataStream):
             "avg_temp": self.avg_temp
         }
 
-""" 
-Initializing Transaction Stream...
-Stream ID: TRANS_001, Type: Financial Data
-Processing transaction batch: [buy:100, sell:150, buy:75]
-Transaction analysis: 3 operations, net flow: +25 units
- """
+ 
 class TransactionStream(DataStream):
     def __init__(self, stream_id):
         self.stream_id = stream_id
         self.net_flow = 0
-        self.total_operations = 0
-
-    def filter_data(self, data_batch, criteria: Optional[str] = None) -> List[Any]:
-        return [d for d in data_batch if "buy" in d]
+        self.total_ops = 0
 
     def process_batch(self, data_batch: List[Any]) -> str:
-        filtered = self.filter_data(data_batch, "Trans")
+        filtered = self.filter_data(data_batch, "transactions")
+        self.net_flow = sum(sum(d.get('buy', [])) - sum(d.get('sell', []))
+                            for d in filtered)
+        self.total_ops = sum(len(d) for d in filtered)
+
         print("Initializing Transaction Stream...")
         print(f"Stream ID: {self.stream_id}, Type: Financial Data")
-        print(f"Processing transaction batch: {filtered}")
+        print(*(f"Processing transaction batch: [buy:{d['buy'][0]}, "
+                f"sell:{d['sell'][0]}, buy:{d['buy'][1]}]" for d in filtered))
+        print(f"Transaction analysis: {self.total_ops} operations, net flow: "
+              f"{"+" if self.net_flow >= 0 else "-"}{self.net_flow} units\n")
 
+    def get_stats(self):
+        return {
+            "stream_id": self.stream_id,
+            "stream_type": "Transaction",
+            "total_operations": self.total_ops,
+            "net_flow": self.avg_tenet_flowmp
+        }
+
+""" 
+Initializing Event Stream...
+Stream ID: EVENT_001, Type: System Events
+Processing event batch: [login, error, logout]
+Event analysis: 3 events, 1 error detected
+ """
 
 class EventStream(DataStream):
     def __init__(self, stream_id):
         self.stream_id = stream_id
 
     def process_batch(self, data_batch: List[Any]) -> str:
-        pass
+        filtered = self.filter_data(data_batch, "logs")
 
+        print("Initializing Event Stream...")
+        print(f"Stream ID: {self.stream_id}, Type: System Events")
+        print(*(f"Processing event batch: [{d['events'][0]}, {d['events'][1]}, "
+                f"{d['events'][2]}]" for d in filtered))
 
 class StreamProcessor():
     pass
@@ -91,7 +103,7 @@ if __name__ == "__main__":
     data_batch = [
         {"type": "sensor", "temp": 22.5, "humidity": 65, "pressure": 1013},
         {"type": "transactions", "buy": [100, 75], "sell": [150]}, 
-        {"logs": "logs", "events": ["login", "error", "logout"]}
+        {"type": "logs", "events": ["login", "error", "logout"]}
     ]
 
     """ Sensor Stream """
@@ -99,8 +111,12 @@ if __name__ == "__main__":
     ss.process_batch(data_batch)
 
     """ Transaction Stream """
-    ss = TransactionStream("TRANS_001")
-    ss.process_batch(data_batch)
+    ts = TransactionStream("TRANS_001")
+    ts.process_batch(data_batch)
+
+    """ Event Stream """
+    es = EventStream("EVENT_001")
+    es.process_batch(data_batch)
 
 
 """ 
