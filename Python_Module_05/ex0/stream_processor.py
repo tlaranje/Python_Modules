@@ -90,7 +90,6 @@ class LogProcessor(DataProcessor):
         level = log_levels.get(log_type, "UNKNOWN")
         return f"[{level}] {log_type} level detected: {data_log}"
 
-
     def format_output(self, result: str) -> str:
         return result
 

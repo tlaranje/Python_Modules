@@ -74,10 +74,10 @@ class TransactionStream(DataStream):
         print("Initializing Transaction Stream...")
         print(f"Stream ID: {stats['stream_id']}, Type: Financial Data")
         print(f"Processing transaction batch: buys:{buys}, "
-                f"sells:{sells}")
+              f"sells:{sells}")
         print(f"Transaction analysis: {stats['total_ops']} operations"
-                f", net flow: {'+' if stats['net_flow'] >= 0 else '-'}"
-                f"{stats['net_flow']} units\n")
+              f", net flow: {'+' if stats['net_flow'] >= 0 else '-'}"
+              f"{stats['net_flow']} units\n")
 
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
         return {"stream_id": self.stream_id,
@@ -95,7 +95,7 @@ class EventStream(DataStream):
     def process_batch(self, data_batch: List[Any]) -> str:
         self.total_events = sum(len(e.get('events', [])) for e in data_batch)
         self.errors = sum(e.get('events', []).count('error')
-                         for e in data_batch)
+                          for e in data_batch)
         return data_batch
 
     def display_batch(self, data_batch: List[Any]) -> None:
@@ -106,7 +106,7 @@ class EventStream(DataStream):
         print(f"Stream ID: {stats['stream_id']}, Type: System Events")
         print(f"Processing event batch: {events}")
         print(f"Event analysis: {stats['total_events']} events, "
-                f"{stats['errors']} error detected\n")
+              f"{stats['errors']} error detected\n")
 
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
         return {"stream_id": self.stream_id,
@@ -172,53 +172,3 @@ if __name__ == "__main__":
     print("\nStream filtering active: High-priority data only")
     print("Filtered results: 2 critical sensor alerts, 1 large transaction\n")
     print("All streams processed successfully. Nexus throughput optimal.")
-
-
-
-"""
-=== Polymorphic Stream Processing ===
-Processing mixed stream types through unified interface...
-
-Batch 1 Results:
-- Sensor data: 2 readings processed
-- Transaction data: 4 operations processed
-- Event data: 3 events processed
-
-Stream filtering active: High-priority data only
-Filtered results: 2 critical sensor alerts, 1 large transaction
-
-All streams processed successfully. Nexus throughput optimal.
- """
-
-
-"""
-=== CODE NEXUS - POLYMORPHIC STREAM SYSTEM ===
-
-Initializing Sensor Stream...
-Stream ID: SENSOR_001, Type: Environmental Data
-Processing sensor batch: [temp:22.5, humidity:65, pressure:1013]
-Sensor analysis: 3 readings processed, avg temp: 22.5°C
-
-Initializing Transaction Stream...
-Stream ID: TRANS_001, Type: Financial Data
-Processing transaction batch: [buy:100, sell:150, buy:75]
-Transaction analysis: 3 operations, net flow: +25 units
-
-Initializing Event Stream...
-Stream ID: EVENT_001, Type: System Events
-Processing event batch: [login, error, logout]
-Event analysis: 3 events, 1 error detected
-
-=== Polymorphic Stream Processing ===
-Processing mixed stream types through unified interface...
-
-Batch 1 Results:
-- Sensor data: 2 readings processed
-- Transaction data: 4 operations processed
-- Event data: 3 events processed
-
-Stream filtering active: High-priority data only
-Filtered results: 2 critical sensor alerts, 1 large transaction
-
-All streams processed successfully. Nexus throughput optimal.
-"""
