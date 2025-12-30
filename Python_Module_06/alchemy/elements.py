@@ -13,4 +13,3 @@ def create_earth() -> str:
 
 def create_air() -> str:
     return "Air element created"
-
