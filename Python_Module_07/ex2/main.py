@@ -17,7 +17,7 @@ if __name__ == "__main__":
     print("Playing Arcane Warrior (Elite Card):\n")
     Arcane_Warrior = ECard("Arcane_Warrior", 10, CardRarity.Legendary, 4)
     deck.add_card(Arcane_Warrior)
-    game_state =  {"Name": None, "Cost": 0, "Rarity": None}
+    game_state = {"Name": None, "Cost": 0, "Rarity": None}
     Arcane_Warrior.play(game_state)
 
     print(f"Combat phase: {Arcane_Warrior.attack("Enemy")}")

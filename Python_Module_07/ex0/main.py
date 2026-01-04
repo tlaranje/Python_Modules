@@ -11,7 +11,7 @@ if __name__ == "__main__":
 
     print("Playing Fire Dragon with 6 mana available:")
     print(f"Playable: {dragon.is_playable(6)}")
-    game_state =  {'card_played': None, 'mana_used': 0, 'effect': None}
+    game_state = {'card_played': None, 'mana_used': 0, 'effect': None}
     print(f"Play result: {dragon.play(game_state)}\n")
 
     print("Fire Dragon attacks Goblin Warrior:")

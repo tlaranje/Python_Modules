@@ -2,7 +2,7 @@ import random
 from ex0.Card import Card
 from ex2.Combatable import Combatable
 from ex2.Magical import Magical
-from ex1.Deck import Deck
+
 
 class EliteCard(Card, Combatable, Magical):
     def __init__(self, name, cost, rarity, mana):
@@ -18,7 +18,14 @@ class EliteCard(Card, Combatable, Magical):
         return game_state
 
     def get_combat_stats(self) -> dict:
-        pass
+        return {
+            "name": self.name,
+            "card_type": self.type,
+            "combat_style": "melee",
+            "damage_range": "1-10",
+            "can_attack": True,
+            "can_defend": True
+        }
 
     def attack(self, target) -> dict:
         attack_res = {
@@ -46,6 +53,13 @@ class EliteCard(Card, Combatable, Magical):
             if s.name == spell_name:
                 spell = s
 
+        if spell is None:
+            return {
+                "caster": self.name,
+                "spell": spell_name,
+                "error": "Spell not found"
+            }
+
         spell_res = {
             "caster": self.name,
             "spell": spell_name,
@@ -55,7 +69,16 @@ class EliteCard(Card, Combatable, Magical):
         return spell_res
 
     def channel_mana(self, amount: int) -> dict:
-        channel_res = {"channeled": amount, "total_mana": amount + self.mana}
-        return channel_res
+        self.mana += amount
+        return {
+            "channeled": amount,
+            "total_mana": self.mana
+        }
+
     def get_magic_stats(self) -> dict:
-        pass
+        return {
+            "name": self.name,
+            "mana": self.mana,
+            "total_spells": len(self.spells),
+            "spells": [s.name for s in self.spells]
+        }

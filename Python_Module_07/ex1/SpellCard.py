@@ -13,13 +13,14 @@ class EffectType(Enum):
 
 class SpellCard(Card):
     def __init__(self,
-            name: str,
-            cost: int,
-            rarity: CardRarity,
-            effect_type: EffectType) -> None:
+                 name: str,
+                 cost: int,
+                 rarity: CardRarity,
+                 effect_type: EffectType) -> None:
         super().__init__(name, cost, rarity)
         self.effect_type = effect_type
         self.type = CardType.Spell
+        self.deck = None
 
     def get_card_info(self) -> dict:
         card_info = {
