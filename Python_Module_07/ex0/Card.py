@@ -14,10 +14,6 @@ class CardType(Enum):
     Spell = 2
     Artifact = 3
 
-class EffectType(Enum):
-    Damage = 1
-    Poison = 2
-    Freeze = 3
 
 class Card(ABC):
     def __init__(self,

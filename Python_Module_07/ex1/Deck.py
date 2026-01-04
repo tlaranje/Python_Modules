@@ -1,24 +1,36 @@
+import random
 from ex0.Card import Card
-from ex0.CreatureCard import CreatureCard as CCard
-
+from ex0.Card import CardType
 
 class Deck():
     def __init__(self):
-        self.cards_lst = []
+        self.deck_cards = []
+        self.play_cards = []
 
     def add_card(self, card: Card) -> None:
-        self.cards_lst.append(card)
+        self.deck_cards.append(card)
 
     def remove_card(self, card_name: str) -> bool:
-        for c in self.cards_lst:
+        for c in self.deck_cards:
             if c.name == card_name:
-                self.cards_lst.remove(c)
+                self.deck_cards.remove(c)
+                return True
+        return False
 
     def shuffle(self) -> None:
-        pass
+        random.shuffle(self.deck_cards)
 
     def draw_card(self) -> Card:
-        pass
+        if not self.deck_cards:
+            return None
+
+        card = self.deck_cards[-1]
+        self.remove_card(card.name)
+
+        if card.type != CardType.Spell:
+            self.play_cards.append(card)
+
+        return card
 
     def get_deck_stats(self) -> dict:
         total_cards = 0
@@ -27,15 +39,14 @@ class Deck():
         artifacts = 0
         total_cost = 0
 
-        for c in self.cards_lst:
-            card = c.get_card_info()
-            if card["type"] == "Creature":
+        for c in self.deck_cards:
+            if c.type == CardType.Creature:
                 creatures += 1
-            elif card["type"] == "Spell":
+            elif c.type == CardType.Spell:
                 spells += 1
-            elif card["type"] == "Artifact":
+            elif c.type == CardType.Artifact:
                 artifacts += 1
-            total_cost += card["cost"]
+            total_cost += c.cost
             total_cards += 1
 
         deck_stats = {
@@ -43,7 +54,7 @@ class Deck():
             "creatures": creatures,
             "spells": spells,
             "artifacts": artifacts,
-            "avg_cost": total_cost / total_cards
+            "avg_cost": total_cost / total_cards if total_cards > 0 else 0
         }
 
         return deck_stats

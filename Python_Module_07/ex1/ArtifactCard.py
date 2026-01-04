@@ -25,7 +25,19 @@ class ArtifactCard(Card):
         return card_info
 
     def play(self, game_state: dict) -> dict:
-        pass
+        game_state["card_played"] = self.name
+        game_state["mana_used"] = self.cost
+        game_state["effect"] = self.effect
+        return game_state
 
     def activate_ability(self) -> dict:
-        pass
+        if self.durability <= 0:
+            return {
+                "artifact_name": self.name,
+                "effect": None,
+                "status": "Destroyed"}
+
+        return {
+            "artifact_name": self.name,
+            "effect": self.effect,
+            "status": "Active"}
