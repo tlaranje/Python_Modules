@@ -1,0 +1,31 @@
+Ex0:
+Como é que o overriding de métodos permite que a mesma interface de
+processamento trate tipos de dados completamente diferentes? O que torna esta
+abordagem mais poderosa do que usar funções separadas?
+
+O overriding deixa cada classe dar a sua própria versão do método.
+Assim, a mesma interface funciona para qualquer tipo de dado.
+É melhor que funções separadas porque evita duplicação e torna o
+código mais simples de expandir.
+
+
+Ex1:
+Como é que o polimorfismo permite que o StreamProcessor trate diferentes tipos
+de streams sem conhecer as suas implementações específicas? Quais são os
+benefícios desta abordagem?
+
+O polimorfismo garante que todas as streams têm os mesmos métodos.
+O StreamProcessor só chama esses métodos, sem saber como funcionam.
+Isto torna o sistema flexível e fácil de manter.
+
+
+Ex2:
+Como é que a combinação de overriding de métodos e polimorfismo por subtipos
+permite construir sistemas de processamento de dados escaláveis e
+fáceis de manter?
+Que problemas reais de engenharia esta abordagem resolve?
+
+Cada tipo define o seu comportamento, mas todos usam a mesma interface.
+Isto permite crescer o sistema sem reescrever código.
+Resolve problemas como integrar novos formatos, adaptar pipelines e
+manter sistemas grandes sem complicação.

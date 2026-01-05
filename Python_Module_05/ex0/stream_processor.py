@@ -3,9 +3,6 @@ from typing import Any, List, Dict
 
 
 class DataProcessor(ABC):
-    def __init__(self):
-        pass
-
     @abstractmethod
     def process(self, data: Any) -> str:
         pass
@@ -13,37 +10,29 @@ class DataProcessor(ABC):
     @abstractmethod
     def validate(self, data: Any) -> bool:
         pass
-
-    @abstractmethod
-    def format_output(self, result: str) -> str:
-        pass
-
-
-class NumericProcessor(DataProcessor):
-    def validate(self, data: any) -> bool:
-        try:
-            for d in data:
-                d + 0
-            return True
-        except Exception:
-            return False
-
-    def process(self, data: Any) -> str:
-        return str(f"Processed {len(data)} numeric values, sum={sum(data)}, "
-                   f"avg={sum(data) / len(data)}")
 
     def format_output(self, result: str) -> str:
         return result
 
 
+class NumericProcessor(DataProcessor):
+    def validate(self, data: Any) -> bool:
+        try:
+            return all(isinstance(d, (int, float)) for d in data)
+        except Exception:
+            return False
+
+    def process(self, data: Any) -> str:
+        return (f"Processed {len(data)} numeric values, "
+                f"sum={sum(data)}, "
+                f"avg={sum(data) / len(data)}")
+
+
 class TextProcessor(DataProcessor):
     def validate(self, data: Any) -> bool:
         try:
-            if data.strip() == "":
-                return False
-            data + ""
-            text = str(data)
-            return not text.split(":", 1)[0].isupper()
+            text = str(data).strip()
+            return bool(text) and ":" not in text.split(" ", 1)[0]
         except Exception:
             return False
 
@@ -51,33 +40,19 @@ class TextProcessor(DataProcessor):
         return str(f"Processed text: {len(data)} characters, "
                    f"{len(str(data).split())} words")
 
-    def format_output(self, result: str) -> str:
-        return result
-
 
 class LogProcessor(DataProcessor):
     def validate(self, data: Any) -> bool:
         try:
-            if data.strip() == "":
-                return False
-
             if ":" not in data:
                 return False
-
             log_type, message = data.split(":", 1)
-
-            if not log_type.strip().isupper():
-                return False
-
-            if message.strip() == "":
-                return False
-
-            return True
+            return log_type.isupper() and message.strip() != ""
         except Exception:
             return False
 
     def process(self, data: Any) -> str:
-        log_type, data_log = str(data).split(":", 1)
+        log_type, data_log = data.split(":", 1)
         log_type = log_type.strip()
         data_log = data_log.strip()
 
@@ -90,15 +65,12 @@ class LogProcessor(DataProcessor):
         level = log_levels.get(log_type, "UNKNOWN")
         return f"[{level}] {log_type} level detected: {data_log}"
 
-    def format_output(self, result: str) -> str:
-        return result
-
 
 if __name__ == "__main__":
     print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===\n")
 
     """ Numeric Processor """
-    data_num: List[any] = [1, 2, 3, 4, 5]
+    data_num: List[Any] = [1, 2, 3, 4, 5]
     num_p = NumericProcessor()
     print("Initializing Numeric Processor...")
     print(f"Processing data: {data_num}")
@@ -147,4 +119,4 @@ if __name__ == "__main__":
                 i += 1
                 break
 
-    print("\nFoundation systems online. Nexus ready for advanced streams")
+    print("\nFoundation systems online. Nexus ready for advanced streams.")

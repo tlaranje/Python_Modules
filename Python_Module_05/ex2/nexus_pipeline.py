@@ -15,8 +15,6 @@ class InputStage:
 
 class TransformStage:
     def process(self, data: Any) -> Any:
-        if isinstance(data, dict):
-            data["transformed"] = True
         return data
 
 
@@ -103,7 +101,7 @@ class NexusManager:
 
     def run(self, data_list: List[Any]) -> None:
         for name, pipeline, data in zip(self.names, self.pipelines, data_list):
-            print(f"Processing {name} data through pipeline...")
+            print(f"Processing {name} data same through pipeline...")
             result = pipeline.execute(data)
             print(f"{result}\n")
 
