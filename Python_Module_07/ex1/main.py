@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     while deck.deck:
         c = deck.draw_card()
-        print(f"Drew: {c.name} ({c.get_card_info()["type"]})")
+        print(f"Drew: {c.name} ({c.get_card_info()['type']})")
         game_state = {'card_played': None, 'mana_used': 0, 'effect': None}
         print(f"Play result: {c.play(game_state)}\n")
 

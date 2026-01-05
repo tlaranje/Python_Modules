@@ -11,13 +11,13 @@ if __name__ == "__main__":
 
     print("Testing spell recording with validation:")
     print("record_spell(\"Fireball\", \"fire air\"): "
-          f"{rs("Fireball", "fire air")}")
+          f"{rs('Fireball', 'fire air')}")
     print("record_spell(\"Dark Magic\", \"shadow\"): "
-          f"{rs("Dark Magic", "shadow")}\n")
+          f"{rs('Dark Magic', 'shadow')}\n")
 
     print("Testing late import technique:")
-    print('record_spell("Lightning", "air"): '
-          f'{rs("Lightning", "air")}')
+    print("record_spell(\"Lightning\", \"air\"): "
+          f"{rs('Lightning', 'air')}")
     print("Circular dependency curse avoided using late imports!\n")
 
     print("All spells processed safely!")

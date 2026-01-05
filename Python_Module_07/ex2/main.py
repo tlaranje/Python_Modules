@@ -20,7 +20,7 @@ if __name__ == "__main__":
     game_state = {"Name": None, "Cost": 0, "Rarity": None}
     Arcane_Warrior.play(game_state)
 
-    print(f"Combat phase: {Arcane_Warrior.attack("Enemy")}")
+    print(f"Combat phase: {Arcane_Warrior.attack('Enemy')}")
     print(f"Defense result: {Arcane_Warrior.defend(random.randint(1, 5))}\n")
 
     print("Magic phase:")
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     deck.add_card(spell)
     Arcane_Warrior.spells.append(spell)
     print("Spell cast: "
-          f"{Arcane_Warrior.cast_spell(spell.name, ["Enemy1", "Enemy2"])}")
+          f"{Arcane_Warrior.cast_spell(spell.name, ['Enemy1', 'Enemy2'])}")
     print(f"Mana channel: {Arcane_Warrior.channel_mana(3)}\n")
 
     print("Multiple interface implementation successful!")
