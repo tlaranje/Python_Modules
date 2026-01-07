@@ -17,19 +17,25 @@ class TournamentPlatform:
 
     def create_match(self, card1_id: str, card2_id: str) -> dict:
         self.matches_played += 1
+
         card1 = next((c for c in self.r_cards if c.card_id == card1_id), None)
         card2 = next((c for c in self.r_cards if c.card_id == card2_id), None)
+
+        if card1 is None or card2 is None:
+            raise ValueError("Invalid card ID(s) provided")
 
         res1 = card1.play({"opponent": card2})
         res2 = card2.play({"opponent": card1})
 
         if res1["remaining_health"] > res2["remaining_health"]:
             winner, loser = card1, card2
-        else:
+        elif res2["remaining_health"] > res1["remaining_health"]:
             winner, loser = card2, card1
+        else:
+            return {"result": "draw"}
 
         winner.rating += 16
-        loser.rating -= 16
+        loser.rating = max(0, loser.rating - 16)
 
         winner.update_wins(1)
         loser.update_losses(1)
@@ -50,7 +56,7 @@ class TournamentPlatform:
                 "wins": c.wins,
                 "losses": c.losses
             }
-            for c in sorted(self.res_cards, key=attrgetter("rating"))]
+            for c in sorted(self.r_cards, key=attrgetter("rating"))]
 
     def generate_tournament_report(self) -> dict:
         total_cards = len(self.r_cards)

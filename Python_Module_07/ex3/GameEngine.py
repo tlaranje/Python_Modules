@@ -1,6 +1,5 @@
 from ex3.CardFactory import CardFactory
 from ex3.GameStrategy import GameStrategy
-from ex0.Card import CardType
 
 
 class GameEngine:
@@ -9,9 +8,12 @@ class GameEngine:
         self.hand = []
         self.battlefield = []
         self.deck.game_engine = self
+        self.strategy = None
 
     def configure_engine(
             self, factory: CardFactory, strategy: GameStrategy) -> None:
+        self.strategy = strategy
+
         cards_to_create = [
             ("creature", "Fire Dragon"),
             ("creature", "Goblin Warrior"),
@@ -26,28 +28,20 @@ class GameEngine:
             elif card_type == "artifact":
                 factory.create_artifact(name)
 
-            while self.deck.deck:
-                card = self.deck.draw_card()
-                self.hand.append(card)
-
         self.deck.shuffle()
 
+        if len(self.deck.deck) == 0:
+            raise RuntimeError("Factory did not add any cards to the deck")
+
+        for _ in range(3):
+            if self.deck.deck:
+                self.hand.append(self.deck.draw_card())
+
     def simulate_turn(self) -> dict:
-        turn_log = {
-            "played_cards": [],
-            "battlefield": []
-        }
+        if not self.strategy:
+            raise RuntimeError("Strategy not configured")
 
-        for card in self.hand[:]:
-            turn_log["played_cards"].append(card.name)
-
-            if card.type != CardType.Spell:
-                self.battlefield.append(card)
-                turn_log["battlefield"].append(card.name)
-
-            self.hand.remove(card)
-
-        return turn_log
+        return self.strategy.execute_turn(self.hand, self.battlefield)
 
     def get_engine_status(self) -> dict:
         return {

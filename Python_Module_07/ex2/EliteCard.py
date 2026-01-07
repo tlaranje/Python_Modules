@@ -7,6 +7,10 @@ from ex2.Magical import Magical
 class EliteCard(Card, Combatable, Magical):
     def __init__(self, name, cost, rarity, mana):
         super().__init__(name, cost, rarity)
+
+        if mana <= 0:
+            raise ValueError("Mana must be a positive value")
+
         self.type = "Elite"
         self.spells = []
         self.mana = mana
@@ -14,7 +18,7 @@ class EliteCard(Card, Combatable, Magical):
     def play(self, game_state: dict) -> dict:
         game_state["Name"] = self.name
         game_state["Cost"] = self.cost
-        game_state["Rarity"] = self.rarity
+        game_state["Rarity"] = self.rarity.name
         return game_state
 
     def get_combat_stats(self) -> dict:

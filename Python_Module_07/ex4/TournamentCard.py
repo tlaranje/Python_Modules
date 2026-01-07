@@ -21,16 +21,22 @@ class TournamentCard(Card, Combatable, Rankable):
         self.losses = 0
 
     def play(self, game_state: dict) -> dict:
-        return self.attack(game_state["opponent"])
+        opponent = game_state.get("opponent")
+
+        if opponent is None:
+            raise ValueError("Opponent not provided")
+
+        return self.attack(opponent)
 
     def attack(self, target) -> dict:
         return target.defend(self.attack_power)
 
     def defend(self, incoming_damage: int) -> dict:
-        remaining_health = self.health - incoming_damage
+        self.health -= incoming_damage
+
         return {
             "damage_taken": incoming_damage,
-            "remaining_health": remaining_health
+            "remaining_health": self.health
         }
 
     def get_tournament_stats(self) -> dict:

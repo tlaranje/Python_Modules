@@ -8,39 +8,44 @@ if __name__ == "__main__":
     print("=== DataDeck Tournament Platform ===\n")
     print("Registering Tournament Cards...\n")
 
-    t_platform = TournamentPlatform()
+    try:
+        t_platform = TournamentPlatform()
 
-    card1 = t_card("Fire Dragon",
-                   random.randint(1, 5),
-                   CardRarity.Legendary,
-                   random.randint(1, 10),
-                   random.randint(1, 10),
-                   1200,
-                   "dragon_001")
+        card1 = t_card(
+            "Fire Dragon",
+            random.randint(1, 5),
+            CardRarity.Legendary,
+            random.randint(1, 10),
+            random.randint(1, 10),
+            1200,
+            "dragon_001")
 
-    card2 = t_card("Ice Wizard",
-                   random.randint(1, 5),
-                   CardRarity.Legendary,
-                   random.randint(1, 10),
-                   random.randint(1, 10),
-                   1150,
-                   "wizard_001")
+        card2 = t_card(
+            "Ice Wizard",
+            random.randint(1, 5),
+            CardRarity.Legendary,
+            random.randint(1, 10),
+            random.randint(1, 10),
+            1150,
+            "wizard_001")
 
-    print(f"{t_platform.register_card(card1)}")
-    print(f"{t_platform.register_card(card2)}")
+        print(f"{t_platform.register_card(card1)}")
+        print(f"{t_platform.register_card(card2)}")
 
-    print("Creating tournament match...")
-    print("Match result: "
-          f"{t_platform.create_match(card1.card_id, card2.card_id)}\n")
+        print("Creating tournament match...")
+        result = t_platform.create_match(card1.card_id, card2.card_id)
+        print(f"Match result: {result}\n")
 
-    print("Tournament Leaderboard:")
-    print(f"1. {card1.name} - "
-          f"Rating: {card1.rating} ({card1.wins}-{card1.losses})")
-    print(f"1. {card2.name} - "
-          f"Rating: {card2.rating} ({card2.wins}-{card2.losses})\n")
+        print("Tournament Leaderboard:")
+        for pos, entry in enumerate(t_platform.get_leaderboard(), start=1):
+            print(f"{pos}. {entry['name']} - Rating: {entry['rating']} "
+                  f"({entry['wins']}-{entry['losses']})")
 
-    print("Platform Report:")
-    print(t_platform.generate_tournament_report())
+        print("\nPlatform Report:")
+        print(t_platform.generate_tournament_report())
 
-    print("\n=== Tournament Platform Successfully Deployed! ===")
-    print("All abstract patterns working together harmoniously!")
+        print("\n=== Tournament Platform Successfully Deployed! ===")
+        print("All abstract patterns working together harmoniously!")
+
+    except Exception as e:
+        print(f"Error: {e}")

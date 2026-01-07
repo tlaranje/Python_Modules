@@ -20,6 +20,10 @@ class Card(ABC):
                  name: str,
                  cost: int,
                  rarity: CardRarity) -> None:
+
+        if cost < 0:
+            raise ValueError("Cost must be a positive value")
+
         self.name = name
         self.cost = cost
         self.rarity = rarity

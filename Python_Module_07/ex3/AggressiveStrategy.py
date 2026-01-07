@@ -1,4 +1,3 @@
-import random
 from ex3.GameStrategy import GameStrategy
 from ex0.Card import CardType, CardRarity
 from ex0.CreatureCard import CreatureCard
@@ -11,13 +10,14 @@ class AggressiveStrategy(GameStrategy):
         targets_attacked = []
         damage_dealt = 0
 
-        for card in hand:
+        enemy = CreatureCard("Enemy Player", 5, CardRarity.Common, 1, 5)
+        targets_attacked.append(enemy.name)
+
+        for card in hand[:]:
             game_state = card.play({
                 "card_played": None,
                 "mana_used": 0,
                 "effect": None})
-
-            enemy = CreatureCard("Enemy Player", 5, CardRarity.Common, 1, 5)
 
             mana_used += game_state["mana_used"]
             cards_played.append(card.name)
@@ -26,9 +26,9 @@ class AggressiveStrategy(GameStrategy):
                 battlefield.append(card)
                 dmg = card.attack_target(enemy)
                 damage_dealt += dmg["damage_dealt"]
-                targets_attacked.append(enemy.name)
             elif card.type == CardType.Spell:
-                damage_dealt += random.randint(1, 5)
+                effect = card.resolve_effect([enemy])
+                damage_dealt += effect["value"]
             elif card.type == CardType.Artifact:
                 battlefield.append(card)
 
@@ -45,6 +45,4 @@ class AggressiveStrategy(GameStrategy):
         return "AggressiveStrategy"
 
     def prioritize_targets(self, available_targets: list) -> list:
-        if not available_targets:
-            return []
-        return available_targets
+        return available_targets or []

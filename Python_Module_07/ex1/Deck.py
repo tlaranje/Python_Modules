@@ -25,7 +25,7 @@ class Deck():
     def draw_card(self) -> Card:
         if not self.deck:
             return None
-        return self.deck.pop()
+        return self.deck.pop(0)
 
     def get_deck_stats(self) -> dict:
         total_cards = len(self.deck)

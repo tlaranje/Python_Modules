@@ -38,18 +38,18 @@ class SpellCard(Card):
 
         effect = self.resolve_effect(["Enemy"])
 
-        if effect["type"] == EffectType.Damage:
-            game_state["effect"] = f"Deal {effect['value']} damage to target"
-        elif effect["type"] == EffectType.Heal:
-            game_state["effect"] = f"Heal {effect['value']} health to target"
-        elif effect["type"] == EffectType.Buff:
-            game_state["effect"] = (
-                f"Buff target with +{effect['value']} health "
-                f"for {effect['duration']} turns")
-        elif effect["type"] == EffectType.Debuff:
-            game_state["effect"] = (
-                f"Debuff target with -{effect['value']} health "
-                f"for {effect['duration']} turns")
+        eff_types = {
+             EffectType.Damage: "Deal {value} damage to target",
+             EffectType.Heal: "Heal {value} health to target",
+             EffectType.Buff: "Buff target with +{value} health for "
+                              "{duration} turns",
+             EffectType.Debuff: "Debuff target with -{value} health "
+                                "for {duration} turns"}
+
+        eff = eff_types.get(effect["type"], "Unknown effect")
+
+        game_state["effect"] = eff.format(value=effect["value"],
+                                          duration=effect["duration"])
 
         return game_state
 

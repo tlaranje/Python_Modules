@@ -18,11 +18,14 @@ class ArtifactCard(Card):
                  durability: int,
                  effect: Effects,) -> None:
         super().__init__(name, cost, rarity)
+
+        if durability <= 0:
+            raise ValueError("Durability must be a positive value")
+
         self.durability = durability
         self.effect = effect
         self.value = random.randint(1, 5)
         self.type = CardType.Artifact
-        self.deck = None
 
     def get_card_info(self) -> dict:
         card_info = {
@@ -54,5 +57,5 @@ class ArtifactCard(Card):
 
         return {
             "artifact_name": self.name,
-            "effect": self.effect,
+            "effect": f"Permanent: +{self.value} {self.effect.value} per turn",
             "status": "Active"}
