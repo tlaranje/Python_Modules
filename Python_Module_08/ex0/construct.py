@@ -6,7 +6,6 @@ import os
 
 if __name__ == "__main__":
     try:
-
         # When inside a virtual environment, sys.prefix differs from
         # sys.base_prefix.
         if sys.prefix != sys.base_prefix:
@@ -25,10 +24,12 @@ if __name__ == "__main__":
             print(f"Environment Path: {virtual_env_path}\n")
 
             print("SUCCESS: You're in an isolated environment!")
-            print("Safe to install packages without affecting the global system.\n")
+            print("Safe to install packages without "
+                  "affecting the global system.\n")
 
             # Build the Python version string (e.g., python3.10)
-            python_version = f"python{sys.version_info.major}.{sys.version_info.minor}"
+            python_version = (f"python{sys.version_info.major}."
+                              f"{sys.version_info.minor}")
 
             # Path to the site-packages directory inside the virtual environment
             virtual_site_packages = os.path.join(
@@ -60,7 +61,7 @@ if __name__ == "__main__":
             print("To enter the construct, run:")
             print("python3 -m venv matrix_env")
             print("source matrix_env/bin/activate  # On Unix/macOS")
-            print("matrix_env\\Scripts\\activate   # On Windows\n")
+            print("matrix_env\nScripts\nactivate   # On Windows\n")
 
             print("Then run this program again.\n")
 

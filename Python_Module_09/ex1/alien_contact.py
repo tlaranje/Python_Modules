@@ -22,6 +22,7 @@ class AlienContact(BaseModel):
     message_received: Optional[str] = Field(None, max_length=500)
     is_verified: bool = False
 
+
 def print_info(s: AlienContact) -> None:
     print(f"ID: {s.station_id}")
     print(f"Name: {s.name}")

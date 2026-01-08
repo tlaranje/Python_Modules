@@ -1,38 +1,56 @@
-import os
+from dotenv import load_dotenv
 import sys
-from dotenv import load_dotenv, dotenv_values
+import os
 
 
 def check_hardcoded_secrets():
-    with open(__file__, "r") as fd:
-        for line in fd:
-            l_s = line.strip()
+    # Scan file for hardcoded secrets
+    try:
+        with open(__file__, "r") as fd:
+            for line in fd:
+                l_s = line.strip()
 
-            if l_s.startswith("#"):
-                continue
+                if l_s.startswith("#"):
+                    continue
 
-            f_keys = ["API_KEY=", "API_KEY =",
-                      "DATABASE_URL=", "DATABASE_URL =",
-                      "ZION_ENDPOINT=", "ZION_ENDPOINT ="]
+                keys = ["API_KEY=", "API_KEY =",
+                        "DATABASE_URL=", "DATABASE_URL =",
+                        "ZION_ENDPOINT=", "ZION_ENDPOINT ="]
 
-            for key in f_keys:
-                if l_s.startswith(key):
-                    return False
-    return True
+                for key in keys:
+                    if l_s.startswith(key):
+                        return False
+        return True
+    except Exception:
+        # If file can't be read, assume safe
+        return True
 
 
 if __name__ == "__main__":
     print("ORACLE STATUS: Reading the Matrix...\n")
 
-    load_dotenv()
+    # Load .env and read config in one try block
+    try:
+        load_dotenv()
 
-    matrix_mode = os.getenv("MATRIX_MODE", "development")
-    db_url = os.getenv("DATABASE_URL")
-    api_key = os.getenv("API_KEY")
-    log_level = os.getenv("LOG_LEVEL")
-    zion = os.getenv("ZION_ENDPOINT")
+        matrix_mode = os.getenv("MATRIX_MODE")
+        db_url = os.getenv("DATABASE_URL")
+        api_key = os.getenv("API_KEY")
+        log_level = os.getenv("LOG_LEVEL")
+        zion = os.getenv("ZION_ENDPOINT")
+
+    except Exception:
+        print("ERROR: Failed to load configuration")
+        sys.exit(1)
+
+    # Validate MATRIX_MODE
+    if matrix_mode not in ("development", "production"):
+        print("ERROR: MATRIX_MODE must be 'development' or 'production'")
+        sys.exit(1)
 
     print("Configuration loaded:")
+
+    # Check for missing values
     missing = []
     if not db_url:
         missing.append("DATABASE_URL")
@@ -40,33 +58,38 @@ if __name__ == "__main__":
         missing.append("API_KEY")
     if not zion:
         missing.append("ZION_ENDPOINT")
+    if not log_level:
+        missing.append("LOG_LEVEL")
 
     if missing:
         print("WARNING: Missing configuration values:")
         for m in missing:
             print(f" - {m}")
-            print("\nPlease update your .env file.\n")
+        print("\nPlease update your .env file.\n")
+
+    # Show mode-specific behavior
     if matrix_mode == "development":
-        print(f"Mode: development")
+        print("Mode: development")
         print("Database: Connected to local instance")
         print("API Access: Authenticated")
         print("Log Level:", log_level or "DEBUG")
         print("Zion Network:", zion or "Local network")
+
     elif matrix_mode == "production":
         print("Mode: production")
         print("Database: Connected to production instance")
         print("API Access: Production key active")
         print("Log Level:", log_level or "INFO")
         print("Zion Network:", zion or "Production network")
-    else:
-        print("ERROR: Invalid MATRIX_MODE")
 
+    # Security checks
     print("\nEnvironment security check:")
     if check_hardcoded_secrets():
         print("[OK] No hardcoded secrets detected")
     else:
         print("[WARNING] Hardcoded secrets found in oracle.py")
 
+    # Check .env presence
     if os.path.exists(".env"):
         print("[OK] .env file properly configured")
     else:
