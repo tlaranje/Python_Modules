@@ -5,6 +5,12 @@ import pandas as pd
 import numpy as np
 import sys
 
+def compare_versions():
+    print("\nDependency version comparison:")
+    print(f"Environment detected: {detect_environment()}")
+    print(f"Pandas version: {pd.__version__}")
+    print(f"Requests version: {rq.__version__}")
+    print(f"Matplotlib version: {plt.__version__}")
 
 def detect_environment():
     python_path = sys.executable
@@ -33,6 +39,7 @@ def check_dependencies():
             else:
                 print(f"[OK] {d} ({version})")
 
+            compare_versions()
             results[d] = True
         except ImportError:
             if detect_environment() == "pip":
