@@ -1,15 +1,16 @@
+# Sort artifacts by power in descending order using a lambda
 def artifact_sorter(artifacts: list[dict]) -> list[dict]:
     return sorted(artifacts, key=lambda x: x["power"], reverse=True)
 
-
+# Filter mages whose power is greater than or equal to min_power
 def power_filter(mages: list[dict], min_power: int) -> list[dict]:
     return list(filter(lambda x: x["power"] >= min_power, mages))
 
-
+# Add "* " prefix and " *" suffix to each spell name
 def spell_transformer(spells: list[str]) -> list[str]:
     return list(map(lambda x: "* " + x + " *", spells))
 
-
+# Calculate max, min, and average power of mages
 def mage_stats(mages: list[dict]) -> dict:
     max_power = max(mages, key=lambda x: x["power"])["power"]
     min_power = min(mages, key=lambda x: x["power"])["power"]

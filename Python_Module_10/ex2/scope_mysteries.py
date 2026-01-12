@@ -1,3 +1,4 @@
+# Closure that counts how many times it has been called
 def mage_counter() -> callable:
     count = 0
 
@@ -8,6 +9,7 @@ def mage_counter() -> callable:
     return counter
 
 
+# Closure that accumulates power over time
 def spell_accumulator(initial_power: int) -> callable:
     total_power = initial_power
 
@@ -18,17 +20,19 @@ def spell_accumulator(initial_power: int) -> callable:
     return add
 
 
+# Factory that creates enchantment functions
 def enchantment_factory(enchantment_type: str) -> callable:
     return lambda x: enchantment_type + " " + x
 
 
+# Memory vault using closure to store and recall values
 def memory_vault() -> dict[str, callable]:
     mem_stored = {}
 
-    def store(key, value):
+    def store(key, value) -> None:
         mem_stored[key] = value
 
-    def recall(key):
+    def recall(key) -> dict:
         return mem_stored.get(key, "Memory not found")
 
     return {"store": store, "recall": recall}

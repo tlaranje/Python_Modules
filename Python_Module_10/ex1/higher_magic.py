@@ -1,4 +1,4 @@
-
+# Basic example spells
 def fireball(damage: int) -> int:
     return damage
 
@@ -10,19 +10,19 @@ def heal(healing: int) -> int:
 def check_power(power: int) -> bool:
     return power > 5
 
-
+# Combine two spells and return both results as a tuple
 def spell_combiner(spell1: callable, spell2: callable) -> callable:
     return lambda *x: (spell1(*x), spell2(*x))
 
-
+# Amplify the result of a spell by a multiplier
 def power_amplifier(base_spell: callable, multiplier: int) -> callable:
     return lambda *x: base_spell(*x) * multiplier
 
-
+# Cast a spell only if the condition is True
 def conditional_caster(condition: callable, spell: callable) -> callable:
     return lambda *x: spell(*x) if condition(*x) else "Spell fizzled"
 
-
+# Cast a list of spells in sequence and return all results
 def spell_sequence(spells: list[callable]) -> callable:
     return lambda *x: [spell(*x) for spell in spells]
 
