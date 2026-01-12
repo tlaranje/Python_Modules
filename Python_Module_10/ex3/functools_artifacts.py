@@ -1,6 +1,7 @@
 from functools import reduce, partial, lru_cache, singledispatch
 from operator import add, mul
 
+
 # Example spells
 def fireball(damage: int) -> int:
     return damage
