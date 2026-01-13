@@ -9,18 +9,19 @@ class ProcessingStage(Protocol):
 
 
 class InputStage:
-    def process(self, data: Any) -> Any:
+    def process(self, data: Any) -> Dict:
         return data
 
 
 class TransformStage:
-    def process(self, data: Any) -> Any:
+    def process(self, data: Any) -> Dict:
         return data
 
 
 class OutputStage:
-    def process(self, data: Any) -> Any:
+    def process(self, data: Any) -> str:
         return data
+
 
 
 class ProcessingPipeline(ABC):
